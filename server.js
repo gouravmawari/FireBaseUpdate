@@ -3,9 +3,9 @@ const app = require("./app");
 
 const StartServer = async () => {
     try {
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        
+        app.listen(3000, () => {
+            console.log(`Server is running on port 3000`);
         });
     } catch (err) {
         console.error("Failed to start server:", err);

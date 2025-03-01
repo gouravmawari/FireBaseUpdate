@@ -3,8 +3,8 @@ class SignUpService {
     constructor(SignUpRepository) {
         this.SignUpRepository = SignUpRepository;
     }
-    async SignUp({ Email, Password }) {
-        return this.SignUpRepository.SignUp({ Email, Password });
+    async SignUp({Email,Password,Username}) {
+        return this.SignUpRepository.SignUp({Email,Password,Username});
     }
 }
 module.exports = new SignUpService(SignUpRepository);
