@@ -1,5 +1,4 @@
-const { ERROR_CODES } = require("../constant/error.code");
-
+const  ERROR_CODES  = require("../constant/error.code");
 class AppError extends Error {
   constructor({
     message = "An error occurred",

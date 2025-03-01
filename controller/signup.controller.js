@@ -5,28 +5,31 @@ class SignUpController {
     constructor(SignUpService) {
         this.SignUpService = SignUpService;
     }
-
     async SignUp(req, res, next) {
-        const { Email, Password } = req.body; 
+        const { Email, Password, Username } = req.body;
         try {
-            if (!Email || !Password) {
+            if (!Email || !Password || !Username) {
+                let missingFields = [];
+                if (!Email) missingFields.push("Email");
+                if (!Password) missingFields.push("Password");
+                if (!Username) missingFields.push("Username");
+
                 return res.sendError(
                     new ValidationError({
-                    message: "Email or Password is missing",
-                    details: missingFields,
+                        message: `Missing fields: ${missingFields.join(", ")}`,
+                        details: missingFields
                     })
-                )
+                );
             }
-            const User = await this.SignUpService.SignUp({ Email, Password });
-
+            const User = await this.SignUpService.SignUp({ Email, Password, Username });
             if (!User) {
                 throw new Error("User not created");
             }
-
-            return res.status(201).json({ data: User });
+            return res.status(201).json({ success: true, data: User });
 
         } catch (err) {
-           return res.status(400).json(err);
+            console.log(err);
+            return res.status(400).json({ error: err.message });
         }
     }
 }
