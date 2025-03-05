@@ -17,9 +17,10 @@ class SignUpRepository {
                 followers: [], 
                 following: [], 
                 posts: [],
+                verified:false,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
             });
-
+            
             return { uid: userRecord.uid, email: Email, username: Username };
         } catch (error) {
             throw new Error(`Firebase signup error: ${error.message}`);
