@@ -30,6 +30,26 @@ class SignUpController {
         } catch (err) {
             console.log(err);
             return res.status(400).json({ error: err.message });
+            next();
+        }
+    }
+    async Verify(req,res,next){
+        const{userId} = req.params;
+        try{
+            if(!userId){
+                return res.Error(
+                    new ValidationError({
+                        message:"userId not provided",
+                        details: missingFields
+                    })
+                );
+            }
+            const verify = await this.SignUpService.Verify({userId});
+            return res.status(201).json("Data Base updated") 
+        }catch(err){
+            console.log(err);
+            return res.status(400).json({ error: err.message });
+            next();
         }
     }
 }

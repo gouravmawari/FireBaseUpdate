@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const errorHandler = (req, res, next) => {
     res.sendError = (error) => {
         res.status(error.statusCode || 500).json({
@@ -13,6 +14,7 @@ const errorHandler = (req, res, next) => {
 };
 app.use(errorHandler);
 app.use(express.json());
+app.use(cors());
 const All = require("./routes");
 app.use("/api", All);
 

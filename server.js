@@ -1,11 +1,12 @@
 require("dotenv").config();
 const app = require("./app");
+const{server} = require("./socket");
+const PORT = process.env.PORT || 3000;
 
 const StartServer = async () => {
     try {
-        
-        app.listen(3000, () => {
-            console.log(`Server is running on port 3000`);
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
         });
     } catch (err) {
         console.error("Failed to start server:", err);
