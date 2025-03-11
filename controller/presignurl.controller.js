@@ -23,10 +23,8 @@ class PresignURLController {
             let response;
             if (post_type === PostType.Video) {
                 const videoResponse = await this.PresignedUrlService.generateUrls({ filetype, post_type, userid });
-
-                // Generate thumbnail URL
                 const thumbnailResponse = await this.PresignedUrlService.generateUrls({ 
-                    filetype: "image/png", // Assuming thumbnail is PNG 
+                    filetype: "image/png", 
                     post_type: PostType.Thumbnail, 
                     userid 
                 });
