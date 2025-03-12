@@ -1,6 +1,7 @@
 const { ValidationError } = require("../utils/error.utils");
 const SignUpService = require("../service/signup.service");
 
+
 class SignUpController {
     constructor(SignUpService) {
         this.SignUpService = SignUpService;
@@ -33,25 +34,49 @@ class SignUpController {
             next();
         }
     }
-    async Verify(req,res,next){
-        const{userId} = req.params;
+
+    async VerifyPhoneOTP(req,res,next){
+        const {idToken} = req.body;
         try{
-            if(!userId){
-                return res.Error(
+            if(!idToken){
+                return res.sendError(
                     new ValidationError({
-                        message:"userId not provided",
+                        message: "token ID missing",
                         details: missingFields
                     })
                 );
             }
-            const verify = await this.SignUpService.Verify({userId});
-            return res.status(201).json("Data Base updated") 
-        }catch(err){
-            console.log(err);
+            const resp = await SignUpService.VerifyPhoneOTP({idToken});
+            return res.status(201).json({ success: true, data: resp });
+        }
+        catch(err){
             return res.status(400).json({ error: err.message });
+            console.log(err);
             next();
         }
     }
+ 
 }
 
 module.exports = new SignUpController(SignUpService);
+
+
+   // async Verify(req,res,next){
+    //     const{userId} = req.params;
+    //     try{
+    //         if(!userId){
+    //             return res.Error(
+    //                 new ValidationError({
+    //                     message:"userId not provided",
+    //                     details: missingFields
+    //                 })
+    //             );
+    //         }
+    //         const verify = await this.SignUpService.Verify({userId});
+    //         return res.status(201).json("Data Base updated") 
+    //     }catch(err){
+    //         console.log(err);
+    //         return res.status(400).json({ error: err.message });
+    //         next();
+    //     }
+    // }

@@ -21,25 +21,46 @@ class SignUpRepository {
                 verified:false,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
             });
-            Verifyemail(Email,userRecord.uid,Username);
+            // Verifyemail(Email,userRecord.uid,Username);
             return { uid: userRecord.uid, email: Email, username: Username };
         } catch (error) {
             throw new Error(`Firebase signup error: ${error.message}`);
         }
     }
-    async verifyUser(userId) {
+    //for Email verification
+    // async verifyUser(userId) {
+    //     try {
+    //         const db = admin.firestore();
+    //         const userRef = db.collection("users").doc(userId);
+    //         await userRef.update({
+    //             verified: true,
+    //             verifiedAt: admin.firestore.FieldValue.serverTimestamp()
+    //         });
+    //         return { success: true, userId: userId };
+    //     } catch (error) {
+    //         throw new Error(`Firebase verification error: ${error.message}`);
+    //     }
+    // }
+
+    async verifyPhoneOTP({idToken}) {
         try {
+            const decodedToken = await admin.auth().verifyIdToken(idToken);
             const db = admin.firestore();
-            const userRef = db.collection("users").doc(userId);
+            const userRef = db.collection("users").doc(decodedToken.uid);
+
             await userRef.update({
+                phoneNumber: decodedToken.phone_number,
                 verified: true,
-                verifiedAt: admin.firestore.FieldValue.serverTimestamp()
+                verifiedAt: admin.firestore.FieldValue.serverTimestamp(),
             });
-            return { success: true, userId: userId };
+
+            return { success: true, uid: decodedToken.uid, phoneNumber: decodedToken.phone_number };
         } catch (error) {
-            throw new Error(`Firebase verification error: ${error.message}`);
+            throw new Error(`Firebase phone verification error: ${error.message}`);
         }
     }
+
+
    }
 
 module.exports = new SignUpRepository();
